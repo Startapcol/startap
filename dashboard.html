@@ -49,9 +49,12 @@ async function login() {
 }
 
 async function cargarDatos() {
-  const { data: negocio } = await supabase.from('negocios').select('*').single();
-  if (!negocio) return;
-
+  const { data: negocio, error } = await supabase.from('negocios').select('*').single();
+  if (!negocio) {
+    document.getElementById('error').textContent = 'No se encontró un negocio conectado a este usuario. Error: ' + (error ? error.message : 'desconocido');
+    return;
+  }
+  
   document.getElementById('login').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
   document.getElementById('nombreNegocio').textContent = negocio.nombre;
